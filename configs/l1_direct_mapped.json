@@ -1,0 +1,14 @@
+{
+  "l1": {
+    "cache_size_bytes": 32768,
+    "block_size_bytes": 64,
+    "associativity": 1,
+    "replacement_policy": "LRU",
+    "write_policy": "WriteBack",
+    "allocation_policy": "WriteAllocate"
+  },
+  "latency": {
+    "l1_hit_cycles": 4,
+    "mem_cycles": 200
+  }
+}
