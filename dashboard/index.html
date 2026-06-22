@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cache Simulator Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5; color: #111;
+      min-height: 100vh; padding: 2rem 1rem;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    h1 { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .subtitle { font-size: 0.85rem; color: #666; margin-bottom: 2rem; }
+    .card {
+      background: #fff; border: 1px solid #e0e0e0;
+      border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem;
+    }
+    .card-title {
+      font-size: 0.78rem; font-weight: 600; color: #888;
+      text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;
+    }
+    textarea {
+      width: 100%; height: 160px;
+      font-family: "Courier New", monospace; font-size: 0.8rem;
+      border: 1px solid #ddd; border-radius: 6px;
+      padding: 0.75rem; resize: vertical; background: #fafafa; color: #111;
+    }
+    textarea:focus { outline: 2px solid #4f46e5; border-color: transparent; }
+    button {
+      margin-top: 0.75rem; padding: 0.65rem 1.5rem;
+      background: #4f46e5; color: #fff; border: none;
+      border-radius: 6px; font-size: 0.9rem; font-weight: 500;
+      cursor: pointer; width: 100%;
+    }
+    button:hover { background: #4338ca; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem; margin-bottom: 1.25rem;
+    }
+    .stat-box {
+      background: #f8f8f8; border: 1px solid #e8e8e8;
+      border-radius: 8px; padding: 0.75rem 1rem;
+    }
+    .stat-label { font-size: 0.75rem; color: #888; margin-bottom: 0.3rem; }
+    .stat-value { font-size: 1.3rem; font-weight: 600; color: #111; }
+    .bar-row { margin-bottom: 0.6rem; }
+    .bar-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.8rem; color: #555; margin-bottom: 4px;
+    }
+    .bar-track { background: #eee; border-radius: 4px; height: 10px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+    .verdict {
+      margin-top: 1rem; padding: 0.75rem 1rem;
+      border-radius: 6px; font-size: 0.875rem; font-weight: 500;
+    }
+    .good { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; }
+    .okay { background: #fffbeb; color: #78350f; border: 1px solid #fcd34d; }
+    .bad  { background: #fef2f2; color: #7f1d1d; border: 1px solid #fca5a5; }
+    .howto {
+      background: #f0f0ff; border: 1px solid #c7c0f5;
+      border-radius: 8px; padding: 1rem 1.25rem;
+      font-size: 0.82rem; color: #3730a3; line-height: 1.8; margin-bottom: 1rem;
+    }
+    .howto code {
+      background: #e0deff; border-radius: 4px;
+      padding: 1px 6px; font-family: "Courier New", monospace;
+    }
+    .hidden { display: none; }
+    footer { text-align: center; font-size: 0.75rem; color: #aaa; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Cache Simulator Dashboard</h1>
+  <p class="subtitle">Visualize your cachesim_cli results — no install needed, runs in browser</p>
+
+  <div class="howto">
+    <strong>How to use:</strong><br>
+    1. Run in WSL: <code>./build/cachesim_cli configs/l1_4way_lru.json traces/loop_locality.trace</code><br>
+    2. Copy the full terminal output<br>
+    3. Paste below and click Visualize
+  </div>
+
+  <div class="card">
+    <div class="card-title">Paste terminal output</div>
+    <textarea id="raw" placeholder="Paste your cachesim_cli output here..."></textarea>
+    <button onclick="visualize()">Visualize</button>
+  </div>
+
+  <div id="results" class="hidden">
+
+    <div class="card">
+      <div class="card-title">L1 Cache</div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-label">Reads</div><div class="stat-value" id="l1-reads">—</div></div>
+        <div class="stat-box"><div class="stat-label">Writes</div><div class="stat-value" id="l1-writes">—</div></div>
+        <div class="stat-box"><div class="stat-label">Hits</div><div class="stat-value" id="l1-hits">—</div></div>
+        <div class="stat-box"><div class="stat-label">Misses</div><div class="stat-value" id="l1-misses">—</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span>Hit rate</span><span id="l1-hr-pct">—</span></div>
+        <div class="bar-track"><div class="bar-fill" id="l1-bar" style="width:0%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span>Miss rate</span><span id="l1-mr-pct">—</span></div>
+        <div class="bar-track"><div class="bar-fill" id="l1-mbar" style="width:0%; background:#ef4444"></div></div>
+      </div>
+    </div>
+
+    <div class="card hidden" id="l2-card">
+      <div class="card-title">L2 Cache</div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-label">Reads</div><div class="stat-value" id="l2-reads">—</div></div>
+        <div class="stat-box"><div class="stat-label">Writes</div><div class="stat-value" id="l2-writes">—</div></div>
+        <div class="stat-box"><div class="stat-label">Hits</div><div class="stat-value" id="l2-hits">—</div></div>
+        <div class="stat-box"><div class="stat-label">Misses</div><div class="stat-value" id="l2-misses">—</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span>Hit rate</span><span id="l2-hr-pct">—</span></div>
+        <div class="bar-track"><div class="bar-fill" id="l2-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Overall</div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-label">Total cycles</div><div class="stat-value" id="o-cycles">—</div></div>
+        <div class="stat-box"><div class="stat-label">Main mem I/O</div><div class="stat-value" id="o-mem">—</div></div>
+        <div class="stat-box"><div class="stat-label">AMAT</div><div class="stat-value" id="o-amat">—</div></div>
+      </div>
+      <div id="verdict" class="verdict hidden"></div>
+    </div>
+
+  </div>
+
+  <footer>Cache Simulator &mdash; github.com/ananyayy37/cache-simulator</footer>
+
+</div>
+<script>
+  function num(text, key) {
+    const m = text.match(new RegExp(key + '\\s*:\\s*([\\d.]+)'));
+    return m ? parseFloat(m[1]) : null;
+  }
+
+  function setBar(barId, pct, pctId) {
+    const p = Math.min(100, Math.max(0, pct));
+    const el = document.getElementById(barId);
+    el.style.width = p.toFixed(1) + '%';
+    if (!el.style.background || el.style.background === 'rgb(239, 68, 68)') {
+      el.style.background = p >= 90 ? '#10b981' : p >= 60 ? '#f59e0b' : '#ef4444';
+    }
+    document.getElementById(pctId).textContent = p.toFixed(2) + '%';
+  }
+
+  function visualize() {
+    const text = document.getElementById('raw').value.trim();
+    if (!text) { alert('Paste your terminal output first.'); return; }
+
+    const reads    = num(text, 'Reads');
+    const writes   = num(text, 'Writes');
+    const hits     = num(text, 'Hits');
+    const misses   = num(text, 'Misses');
+    const hitRate  = num(text, 'Hit Rate');
+    const missRate = num(text, 'Miss Rate');
+    const cycles   = num(text, 'Total Cycles');
+    const memIO    = num(text, 'Main Mem I\\/O');
+    const amat     = num(text, 'AMAT');
+
+    if (reads === null && hits === null) {
+      alert('Could not parse — paste the full cachesim_cli output.');
+      return;
+    }
+
+    document.getElementById('l1-reads').textContent  = reads  !== null ? reads.toLocaleString()  : '—';
+    document.getElementById('l1-writes').textContent = writes !== null ? writes.toLocaleString() : '—';
+    document.getElementById('l1-hits').textContent   = hits   !== null ? hits.toLocaleString()   : '—';
+    document.getElementById('l1-misses').textContent = misses !== null ? misses.toLocaleString() : '—';
+    if (hitRate  !== null) setBar('l1-bar',  hitRate,  'l1-hr-pct');
+    if (missRate !== null) {
+      const mbar = document.getElementById('l1-mbar');
+      mbar.style.background = '#ef4444';
+      const p = Math.min(100, Math.max(0, missRate));
+      mbar.style.width = p.toFixed(1) + '%';
+      document.getElementById('l1-mr-pct').textContent = p.toFixed(2) + '%';
+    }
+
+    document.getElementById('o-cycles').textContent = cycles !== null ? cycles.toLocaleString() : '—';
+    document.getElementById('o-mem').textContent    = memIO  !== null ? memIO.toLocaleString()  : '—';
+    document.getElementById('o-amat').textContent   = amat   !== null ? amat.toFixed(2) + ' cy' : '—';
+
+    const l2card = document.getElementById('l2-card');
+    if (text.includes('[L2 Cache]')) {
+      const l2text = text.split('[L2 Cache]')[1] || '';
+      document.getElementById('l2-reads').textContent  = (num(l2text,'Reads')  || 0).toLocaleString();
+      document.getElementById('l2-writes').textContent = (num(l2text,'Writes') || 0).toLocaleString();
+      document.getElementById('l2-hits').textContent   = (num(l2text,'Hits')   || 0).toLocaleString();
+      document.getElementById('l2-misses').textContent = (num(l2text,'Misses') || 0).toLocaleString();
+      const l2hr = num(l2text, 'Hit Rate');
+      if (l2hr !== null) setBar('l2-bar', l2hr, 'l2-hr-pct');
+      l2card.classList.remove('hidden');
+    } else {
+      l2card.classList.add('hidden');
+    }
+
+    const verdict = document.getElementById('verdict');
+    verdict.className = 'verdict';
+    if (hitRate !== null) {
+      if (hitRate >= 90) {
+        verdict.textContent = '✓ Excellent hit rate — working set fits well in cache.';
+        verdict.classList.add('good');
+      } else if (hitRate >= 60) {
+        verdict.textContent = '⚠ Moderate hit rate — try increasing cache size or associativity.';
+        verdict.classList.add('okay');
+      } else {
+        verdict.textContent = '✗ Low hit rate — working set too large or access pattern is random.';
+        verdict.classList.add('bad');
+      }
+    } else {
+      verdict.classList.add('hidden');
+    }
+
+    document.getElementById('results').classList.remove('hidden');
+  }
+</script>
+</body>
+</html>
