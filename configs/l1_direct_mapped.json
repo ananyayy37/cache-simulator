@@ -1,6 +1,6 @@
 {
   "l1": {
-    "cache_size_bytes": 32768,
+    "cache_size_bytes": 4096,
     "block_size_bytes": 64,
     "associativity": 1,
     "replacement_policy": "LRU",
