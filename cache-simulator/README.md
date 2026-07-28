@@ -1,10 +1,6 @@
 # Cache and Memory Hierarchy Simulator
 
-A trace-driven cache simulator written in modern C++17. Models direct-mapped, set-associative, and fully-associative caches with configurable replacement policies, write policies, and multi-level hierarchies including an optional victim cache.
-
-Built as a portfolio project targeting memory systems, computer architecture, and SDE roles at companies like AMD, Intel, NVIDIA, Qualcomm, ARM, and Synopsys.
-
----
+A trace-driven cache simulator written in modern C++17. Models direct-mapped, set-associative, and fully-associative caches with configurable replacement policies, write policies, and multi-level hierarchies.
 
 ## Features
 
