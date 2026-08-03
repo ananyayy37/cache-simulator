@@ -3,13 +3,13 @@
 A trace-driven cache simulator written in modern C++17. Models direct-mapped, set-associative, and fully-associative caches with configurable replacement policies, write policies.
 ## Features
 
-### Phase 1 — Single Cache
+### Phase 1 - Single Cache
 - Direct-mapped, N-way set-associative, and fully-associative caches
 - Configurable cache size, block size, and associativity
 - Replacement policies: LRU, FIFO, Random
 - Per-access statistics: reads, writes, hits, misses, hit rate, miss rate
 
-### Phase 2 — Hierarchy and Write Policies
+### Phase 2 - Hierarchy and Write Policies
 - L1 + L2 two-level hierarchy
 - Write-back and write-through policies
 - Write-allocate and no-write-allocate allocation policies
