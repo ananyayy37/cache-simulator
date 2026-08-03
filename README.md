@@ -26,7 +26,7 @@ A trace-driven cache simulator written in modern C++17. Models direct-mapped, se
 
 
 ```bash
-git clone https://github.com/<your-username>/cache-simulator.git
+git clone https://github.com/<ananyayy37>/cache-simulator.git
 cd cache-simulator
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j$(nproc)
@@ -103,36 +103,7 @@ Loaded 1600 accesses from traces/loop_locality.trace
 ```
 ---
 
-## Trace format
-
-```
-# Lines starting with # are comments and are ignored
-R 0x1A2B3C      # read
-W 0x00FF00      # write
-r 1000          # lowercase and no 0x prefix are both accepted
-```
-
-Generate traces with:
-```bash
-python3 scripts/generate_traces.py
-```
-
 ---
-
-## Project structure
-
-```
-cache-simulator/
-├── include/cachesim/       # Public headers — one per class
-├── src/                    # Implementations
-├── tests/                  # GoogleTest unit tests — one file per class/feature
-├── traces/                 # Sample memory access traces
-├── configs/                # JSON hierarchy configurations
-├── scripts/                # Trace generation + result plotting (Python)
-└── docs/                   # Design document, address math worked examples
-```
-
-
 ## Benchmark results
 
 | Trace           | Config              | Hit Rate | AMAT (cycles) |
