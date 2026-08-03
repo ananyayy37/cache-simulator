@@ -39,12 +39,6 @@ ctest --test-dir build --output-on-failure
 
 ---
 
-## Usage
-
-```bash
-./build/cachesim_cli <config.json> <trace.trace>
-```
-
 **Examples:**
 
 ```bash
@@ -145,24 +139,6 @@ cache-simulator/
 └── docs/                   # Design document, address math worked examples
 ```
 
----
-
-## Design notes
-
-**Unified cache model.** Direct-mapped (`associativity=1`), N-way set-associative, and fully-associative (`numSets=1`) are all handled by a single `Cache`/`CacheSet` implementation. The "mode" falls out of the configuration numbers, not from separate code paths. This is correct structurally: direct-mapped is just 1-way, fully-associative is just 1-set.
-
-**Replacement policy as Strategy pattern.** `ReplacementPolicy` is an abstract interface; `LRUPolicy`, `FIFOPolicy`, and `RandomPolicy` implement it. `CacheSet` delegates all eviction decisions to whichever policy is injected at construction — adding a new policy (e.g. Pseudo-LRU) requires no changes to `CacheSet` or `Cache`.
-
-**Counter-based LRU.** Each way stores a logical timestamp. On eviction, scan all ways for the minimum. O(associativity) — for realistic associativity (≤16-way) this is faster in practice than a pointer-chasing linked list due to cache-friendly access patterns. A real hardware implementation compares all ways in parallel via dedicated comparators; we model this as a sequential scan since we're not doing gate-level timing simulation.
-
-**Address decomposition.** Given block size B and number of sets S (both required to be powers of two, enforced at construction):
-```
-offset = address & (B - 1)                    // low log2(B) bits
-index  = (address >> log2(B)) & (S - 1)       // next log2(S) bits  
-tag    = address >> (log2(B) + log2(S))        // remaining high bits
-```
-
----
 
 ## Benchmark results
 
