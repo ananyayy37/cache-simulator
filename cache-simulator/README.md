@@ -93,10 +93,6 @@ Loaded 1600 accesses from traces/loop_locality.trace
 }
 ```
 
-`replacement_policy`: `"LRU"` | `"FIFO"` | `"Random"`  
-`write_policy`: `"WriteBack"` | `"WriteThrough"`  
-`allocation_policy`: `"WriteAllocate"` | `"NoWriteAllocate"`
-
 ---
 
 ## Trace format
