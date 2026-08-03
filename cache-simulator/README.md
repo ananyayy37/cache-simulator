@@ -116,6 +116,6 @@ python3 scripts/generate_traces.py
 |-----------------|---------------------|----------|---------------|
 | loop_locality   | L1 4-way LRU        | 99.00%   | 6.00          |
 | matrix_multiply | L1+L2 write-back    | 98.86%   | 6.41          |
-| sequential      | L1 4-way LRU        | —        | run it        |
-| random          | L1 4-way LRU        | —        | run it        |
+| sequential      | L1 4-way LRU        | 0%       | 204           |
+| random          | L1 4-way LRU        | 0.6%     | 99.40%        |
 ```
