@@ -48,8 +48,6 @@ ctest --test-dir build --output-on-failure
 # Two-level write-back hierarchy, matrix multiply trace
 ./build/cachesim_cli configs/l1_l2_writeback.json traces/matrix_multiply.trace
 
-# Same but with victim cache enabled
-./build/cachesim_cli configs/l1_l2_victim.json traces/matrix_multiply.trace
 ```
 
 **Sample output (loop_locality, 4-way LRU):**
