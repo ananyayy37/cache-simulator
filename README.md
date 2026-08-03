@@ -1,6 +1,6 @@
 # Cache and Memory Hierarchy Simulator
 
-A trace-driven cache simulator written in modern C++17. Models direct-mapped, set-associative, and fully-associative caches with configurable replacement policies, write policies.
+A trace-driven cache simulator written in modern C++. Models direct-mapped, set-associative, and fully-associative caches with configurable replacement policies, write policies.
 ## Features
 
 ### Single Cache
