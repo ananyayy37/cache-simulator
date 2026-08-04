@@ -110,7 +110,6 @@ Loaded 1600 accesses from traces/loop_locality.trace
 |-----------------|---------------------|----------|---------------|
 | loop_locality   | L1 4-way LRU        | 99.00%   | 6.00          |
 | matrix_multiply | L1+L2 write-back    | 98.86%   | 6.41          |
-| sequential      | L1 4-way LRU        | -        | run it        |
-| random          | L1 4-way LRU        | -        | run it        |
+
 
 
