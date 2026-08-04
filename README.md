@@ -1,21 +1,33 @@
 # Cache and Memory Hierarchy Simulator
 
-A trace-driven cache simulator written in modern C++. Models direct-mapped, set-associative, and fully-associative caches.
+A trace-driven cache simulator written in modern C++. It models direct-mapped, set-associative, and fully associative cache organizations.
+
 ## Features
 
 ### Single Cache
-- Direct-mapped, N-way set-associative, and fully-associative caches
+- Direct-mapped, N-way set-associative, and fully associative caches
 - Configurable cache size, block size, and associativity
 - Replacement policies: LRU, FIFO, Random
-- Per-access statistics: reads, writes, hits, misses, hit rate, miss rate
+- Per-access statistics:
+  - Reads
+  - Writes
+  - Hits
+  - Misses
+  - Hit rate
+  - Miss rate
 
-### Trace-driven simulation
+### Trace-Driven Simulation
 - Plain-text memory trace parser (`R`/`W`)
-- JSON-based cache configuration.
-- Four sample traces: sequential, random, loop-locality, matrix-multiply
+- JSON-based cache configuration
+- Four sample traces:
+  - Sequential
+  - Random
+  - Loop locality
+  - Matrix multiplication
 
----
+## Sample Output
 
+```text
 ====== Cache Simulation Results ======
 
 [L1 Cache]
@@ -30,12 +42,11 @@ A trace-driven cache simulator written in modern C++. Models direct-mapped, set-
   Total Cycles : 9600
   Main Mem I/O : 16
   AMAT         : 6.00 cycles
+
 ======================================
 ```
 
----
-
-## Config format
+## Configuration Format
 
 ```json
 {
@@ -63,15 +74,10 @@ A trace-driven cache simulator written in modern C++. Models direct-mapped, set-
   }
 }
 ```
----
 
----
-## Benchmark results
+## Benchmark Results
 
-| Trace           | Config              | Hit Rate | AMAT (cycles) |
-|-----------------|---------------------|----------|---------------|
-| loop_locality   | L1 4-way LRU        | 99.00%   | 6.00          |
-| matrix_multiply | L1+L2 write-back    | 98.86%   | 6.41          |
-
-
-
+| Trace | Configuration | Hit Rate | AMAT (cycles) |
+|-------|---------------|---------:|--------------:|
+| Loop locality | L1 (4-way, LRU) | 99.00% | 6.00 |
+| Matrix multiplication | L1 + L2 (Write-back) | 98.86% | 6.41 |
