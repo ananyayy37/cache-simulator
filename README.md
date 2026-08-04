@@ -1,6 +1,6 @@
 # Cache and Memory Hierarchy Simulator
 
-A trace-driven cache simulator written in modern C++. Models direct-mapped, set-associative, and fully-associative caches with configurable replacement policies, write policies.
+A trace-driven cache simulator written in modern C++. Models direct-mapped, set-associative, and fully-associative caches.
 ## Features
 
 ### Single Cache
@@ -9,47 +9,12 @@ A trace-driven cache simulator written in modern C++. Models direct-mapped, set-
 - Replacement policies: LRU, FIFO, Random
 - Per-access statistics: reads, writes, hits, misses, hit rate, miss rate
 
-### Hierarchy and Write Policies
-- L1 + L2 two-level hierarchy
-
 ### Trace-driven simulation
 - Plain-text memory trace parser (`R`/`W`)
 - JSON-based cache configuration.
 - Four sample traces: sequential, random, loop-locality, matrix-multiply
 
 ---
-
-## Build
-
-
-```bash
-git clone https://github.com/<ananyayy37>/cache-simulator.git
-cd cache-simulator
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j$(nproc)
-```
-
-**Run tests:**
-```bash
-ctest --test-dir build --output-on-failure
-```
-
----
-
-**Examples:**
-
-```bash
-# Single-level 4-way LRU cache, loop-locality trace
-./build/cachesim_cli configs/l1_4way_lru.json traces/loop_locality.trace
-
-# Two-level write-back hierarchy, matrix multiply trace
-./build/cachesim_cli configs/l1_l2_writeback.json traces/matrix_multiply.trace
-
-```
-
-**Sample output (loop_locality, 4-way LRU):**
-```
-Loaded 1600 accesses from traces/loop_locality.trace
 
 ====== Cache Simulation Results ======
 
