@@ -12,8 +12,6 @@ A trace-driven cache simulator written in modern C++. Models direct-mapped, set-
 ### Hierarchy and Write Policies
 - L1 + L2 two-level hierarchy
 - Write-back and write-through policies
-- Write-allocate and no-write-allocate allocation policies
-- AMAT (Average Memory Access Time) computation
 
 ### Trace-driven simulation
 - Plain-text memory trace parser (`R`/`W`)
