@@ -73,10 +73,3 @@ A trace-driven cache simulator written in modern C++. It models direct-mapped, s
   }
 }
 ```
-
-## Benchmark Results
-
-| Trace | Configuration | Hit Rate | AMAT (cycles) |
-|-------|---------------|---------:|--------------:|
-| Loop locality | L1 (4-way, LRU) | 99.00% | 6.00 |
-| Matrix multiplication | L1 + L2 (Write-back) | 98.86% | 6.41 |
