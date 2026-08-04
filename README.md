@@ -19,8 +19,7 @@ A trace-driven cache simulator written in modern C++. It models direct-mapped, s
 ### Trace-Driven Simulation
 - Plain-text memory trace parser (`R`/`W`)
 - JSON-based cache configuration
-- Four sample traces:
-  - Sequential
+- Three sample traces:
   - Random
   - Loop locality
   - Matrix multiplication
